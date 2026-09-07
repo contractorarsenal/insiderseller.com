@@ -1,25 +1,32 @@
 import Link from 'next/link';
 import Reveal from '@/components/ui/Reveal';
 
+const WANTED = ['Chrome Hearts', 'Rick Owens', 'ERD', 'Margiela', 'Archive Designer', 'Streetwear'];
+
 export default function SellToUsPromo() {
   return (
-    <section className="bg-yellow px-4 py-20 md:px-8 md:py-32">
-      <Reveal className="mx-auto max-w-5xl">
-        <h2 className="mb-6 font-display text-[13vw] font-black uppercase leading-[0.9] tracking-tight text-black sm:text-6xl md:text-8xl">
-          Your closet
+    <section className="flex min-h-[90vh] items-center bg-yellow px-4 py-24 md:px-8">
+      <Reveal className="mx-auto w-full max-w-6xl">
+        <h2 className="mb-8 font-display text-hero font-black uppercase leading-[0.85] tracking-tight text-black">
+          Sell us
           <br />
-          is our
+          what&rsquo;s worth
           <br />
-          inventory.
+          finding.
         </h2>
-        <p className="mb-8 max-w-md font-sans text-sm text-black/80 md:text-base">
-          Chrome Hearts. Rick Owens. Margiela. ERD. Acne Studios. And the pieces people actually want.
-        </p>
+        <div className="mb-10 flex flex-wrap gap-x-6 gap-y-2">
+          {WANTED.map((w) => (
+            <span key={w} className="font-mono text-xs uppercase tracking-widest text-black/70">
+              {w}
+            </span>
+          ))}
+        </div>
         <Link
           href="/sell"
-          className="inline-block bg-black px-7 py-4 font-sans text-sm uppercase tracking-widest text-white transition-colors duration-200 hover:bg-white hover:text-black"
+          className="wipe-btn wipe-btn--dark inline-flex bg-black px-8 py-5 font-sans text-sm uppercase tracking-widest text-white"
         >
-          Sell To Insiders →
+          <span className="wipe-btn-fill" aria-hidden="true" />
+          <span className="wipe-btn-label">Sell To Insiders →</span>
         </Link>
       </Reveal>
     </section>

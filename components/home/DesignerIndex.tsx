@@ -18,49 +18,41 @@ const FEATURED_SLUGS = [
   'kapital',
   'alyx',
   'balenciaga',
-  'stussy',
 ];
 
 export default function DesignerIndex() {
   const list = FEATURED_SLUGS.map((slug) => designers.find((d) => d.slug === slug)).filter(Boolean) as typeof designers;
   const [active, setActive] = useState<string>(list[0].slug);
+  const activeDesigner = list.find((d) => d.slug === active) ?? list[0];
+  const activeCount = getProductsByBrandSlug(activeDesigner.slug).filter((p) => p.status === 'AVAILABLE').length;
 
   return (
-    <section className="border-t border-black/10 px-4 py-14 md:px-8 md:py-28">
+    <section className="min-h-screen border-t border-black/10 px-4 py-16 md:px-8 md:py-24">
       <Reveal className="mb-10 flex items-end justify-between md:mb-14">
-        <h2 className="font-display text-3xl font-bold uppercase tracking-tight md:text-5xl">Designers</h2>
-        <Link href="/designers" className="hidden font-mono text-xs uppercase tracking-widest underline-anim md:inline">
-          View All Designers →
+        <h2 className="font-display text-section font-black uppercase tracking-tight">Designers</h2>
+        <Link href="/designers" className="arrow-cta hidden font-mono text-xs uppercase tracking-widest underline-anim md:inline">
+          View All <span className="arrow-cta-glyph inline-block">→</span>
         </Link>
       </Reveal>
 
       <div className="grid grid-cols-1 gap-10 md:grid-cols-12">
         <ul className="md:col-span-7">
           {list.map((d) => {
-            const count = getProductsByBrandSlug(d.slug).filter((p) => p.status === 'AVAILABLE').length;
             const isActive = active === d.slug;
             return (
               <li key={d.slug} className="border-b border-black/10">
                 <Link
                   href={`/designers/${d.slug}`}
                   onMouseEnter={() => setActive(d.slug)}
-                  className="flex items-baseline justify-between gap-4 py-4 md:py-5"
+                  className="block py-5 md:py-6"
                 >
                   <span
                     className={cn(
-                      'font-display text-3xl uppercase leading-none tracking-tight transition-colors duration-200 sm:text-5xl md:text-6xl',
-                      isActive ? 'text-black' : 'text-black/25 md:hover:text-black'
+                      'font-display text-5xl uppercase leading-none tracking-tight transition-colors duration-200 sm:text-6xl md:text-[5.5rem]',
+                      isActive ? 'text-black' : 'text-black/20 md:hover:text-black'
                     )}
                   >
                     {d.name}
-                  </span>
-                  <span
-                    className={cn(
-                      'shrink-0 font-mono text-[10px] uppercase tracking-widest text-muted transition-opacity duration-200',
-                      isActive ? 'opacity-100' : 'opacity-0'
-                    )}
-                  >
-                    Available / {String(count).padStart(2, '0')}
                   </span>
                 </Link>
               </li>
@@ -71,6 +63,17 @@ export default function DesignerIndex() {
           <div className="sticky top-24 aspect-[3/4] w-full overflow-hidden">
             <div key={active} className="absolute inset-0 animate-preview-in">
               <Plate seed={`designer-preview-${active}`} tone="dark" watermark={active.replace(/-/g, ' ')} />
+            </div>
+            <div className="absolute inset-x-0 bottom-0 flex items-end justify-between bg-black px-5 py-4 text-white">
+              <div>
+                <p className="font-display text-lg font-bold uppercase leading-none">{activeDesigner.name}</p>
+                <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-white/50">
+                  {activeDesigner.location}
+                </p>
+              </div>
+              <p className="font-mono text-[11px] uppercase tracking-widest text-yellow">
+                Available / {String(activeCount).padStart(2, '0')}
+              </p>
             </div>
           </div>
         </div>

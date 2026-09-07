@@ -1,9 +1,9 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect } from 'react';
 import { useUIStore } from '@/lib/store/ui';
+import Logo from '@/components/ui/Logo';
 import { cn } from '@/lib/utils';
 
 const PRIMARY = [
@@ -47,7 +47,7 @@ export default function MobileMenu() {
       aria-hidden={!open}
     >
       <div className="flex h-[58px] items-center justify-between px-4">
-        <Image src="/insider-sellers-logo.png" alt="Insider Sellers" width={100} height={83} className="h-8 w-auto" />
+        <Logo className="h-9" />
         <button
           type="button"
           onClick={() => setOpen(false)}

@@ -61,6 +61,13 @@ body {
   to { opacity: 1; transform: scale(1); }
 }
 
+@keyframes arrowSlide {
+  0% { transform: translateX(0); }
+  49% { transform: translateX(6px); opacity: 0; }
+  50% { transform: translateX(-6px); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.001ms !important;
@@ -200,5 +207,69 @@ body {
     background-color: #000000;
     color: #FBD601;
     border-color: #000000;
+  }
+
+  /* Typography scale — deliberately huge vs. deliberately tiny, nothing
+     in the generic middle. Sizes are clamps so they scale continuously
+     with viewport width instead of jumping at breakpoints. */
+  .text-hero {
+    font-size: clamp(2.5rem, 11vw, 12rem); /* 40px -> 192px; the low floor
+      matters — a fixed-word single-line like "EVERYONE." must be able to
+      shrink with viewport width on narrow phones instead of overflowing. */
+    line-height: 0.86;
+  }
+  .text-section {
+    font-size: clamp(2.25rem, 8vw, 8.75rem); /* 36px -> 140px */
+    line-height: 0.92;
+  }
+  .text-feature {
+    font-size: clamp(2.5rem, 6vw, 5.625rem); /* 40px -> 90px */
+    line-height: 0.94;
+  }
+
+  /* Arrow that slides out and back in on hover, used on text CTAs. */
+  .arrow-cta:hover .arrow-cta-glyph {
+    animation: arrowSlide 450ms ease;
+  }
+
+  /* Background wipe used on a handful of large CTA buttons: a black panel
+     slides up from below on hover instead of an instant color swap. */
+  .wipe-btn {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .wipe-btn-fill {
+    position: absolute;
+    inset: 0;
+    background-color: #000000;
+    transform: translateY(101%);
+    transition: transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 0;
+  }
+  .wipe-btn:hover .wipe-btn-fill {
+    transform: translateY(0);
+  }
+  .wipe-btn-label {
+    position: relative;
+    z-index: 1;
+    transition: color 320ms ease;
+  }
+  .wipe-btn:hover .wipe-btn-label {
+    color: #FBD601;
+  }
+
+  /* Variant for buttons that rest on a black background — the wipe fill
+     must be yellow instead of black, or it would be invisible on hover. */
+  .wipe-btn--dark .wipe-btn-fill {
+    background-color: #FBD601;
+  }
+  .wipe-btn--dark:hover .wipe-btn-label {
+    color: #000000;
+  }
+
+  /* Very subtle parallax for editorial imagery — translateY only, GPU-cheap. */
+  .parallax-slow {
+    will-change: transform;
   }
 }

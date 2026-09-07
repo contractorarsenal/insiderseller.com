@@ -1,11 +1,11 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useCartStore } from '@/lib/store/cart';
 import { useUIStore } from '@/lib/store/ui';
 import MegaMenu from './MegaMenu';
+import Logo from '@/components/ui/Logo';
 import { cn } from '@/lib/utils';
 
 export default function Header() {
@@ -17,7 +17,7 @@ export default function Header() {
   const setMobileMenuOpen = useUIStore((s) => s.setMobileMenuOpen);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
+    const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
@@ -25,16 +25,17 @@ export default function Header() {
 
   return (
     <header
-      className={cn(
-        'sticky top-0 z-40 w-full bg-edwhite transition-[border-color] duration-300',
-        'border-b',
-        scrolled ? 'border-black/10' : 'border-transparent'
-      )}
+      className="sticky top-0 z-40 w-full bg-yellow text-black"
       onMouseLeave={() => setShopOpen(false)}
     >
-      <div className="relative flex h-[58px] items-center justify-between px-4 md:h-20 md:px-8">
+      <div
+        className={cn(
+          'relative mx-auto flex max-w-[1728px] items-center justify-between px-4 transition-[height] duration-300 md:px-8',
+          scrolled ? 'h-[60px] md:h-[68px]' : 'h-[64px] md:h-[80px]'
+        )}
+      >
         {/* Left / Mobile menu button */}
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-9">
           <button
             type="button"
             className="flex items-center font-mono text-xs uppercase tracking-widest lg:hidden"
@@ -44,43 +45,45 @@ export default function Header() {
             Menu
           </button>
 
-          <nav className="hidden items-center gap-10 lg:flex">
+          <nav className="hidden items-center gap-9 lg:flex">
             <div onMouseEnter={() => setShopOpen(true)}>
               <button
                 type="button"
-                className="font-sans text-sm uppercase tracking-wider underline-anim"
+                className="font-sans text-[13px] font-medium uppercase tracking-wide underline-anim"
                 aria-expanded={shopOpen}
               >
                 Shop
               </button>
             </div>
-            <Link href="/designers" className="font-sans text-sm uppercase tracking-wider underline-anim">
+            <Link href="/designers" className="font-sans text-[13px] font-medium uppercase tracking-wide underline-anim">
               Designers
             </Link>
-            <Link href="/archive" className="font-sans text-sm uppercase tracking-wider underline-anim">
+            <Link href="/archive" className="font-sans text-[13px] font-medium uppercase tracking-wide underline-anim">
               Archive
+            </Link>
+            <Link href="/sell" className="font-sans text-[13px] font-medium uppercase tracking-wide underline-anim">
+              Sell
+            </Link>
+            <Link href="/about" className="font-sans text-[13px] font-medium uppercase tracking-wide underline-anim">
+              About
             </Link>
           </nav>
         </div>
 
-        {/* Center logo */}
+        {/* Center logo — allowed to overlap the yellow bar's bottom edge */}
         <Link
           href="/"
           aria-label="Insider Sellers — home"
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+          className="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-[42%]"
         >
-          <Image
-            src="/insider-sellers-logo.png"
-            alt="Insider Sellers"
-            width={140}
-            height={116}
+          <Logo
             priority
-            className="h-9 w-auto md:h-11"
+            className={cn('transition-[height] duration-300', scrolled ? 'h-[52px] md:h-[64px]' : 'h-[60px] md:h-[76px]')}
           />
         </Link>
 
         {/* Right */}
-        <div className="flex items-center gap-4 md:gap-6">
+        <div className="flex items-center gap-5 md:gap-7">
           <button
             type="button"
             onClick={() => setSearchOpen(true)}
@@ -92,9 +95,6 @@ export default function Header() {
           <button type="button" onClick={() => setSearchOpen(true)} aria-label="Search" className="sm:hidden">
             <SearchIcon />
           </button>
-          <Link href="/sell" className="hidden font-mono text-xs uppercase tracking-widest underline-anim lg:inline">
-            Sell
-          </Link>
           <Link href="/account" className="hidden font-mono text-xs uppercase tracking-widest underline-anim lg:inline">
             Account
           </Link>

@@ -25,17 +25,27 @@ export default function Reveal({ children, className, delay = 0 }: RevealProps) 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+
+    // Safety net: content must never be permanently stuck invisible (a slow
+    // main thread, an extremely fast scroll-past, or any observer edge case
+    // shouldn't be able to hide real content forever).
+    const fallback = setTimeout(() => setVisible(true), 1500);
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setVisible(true);
+          clearTimeout(fallback);
           observer.disconnect();
         }
       },
-      { threshold: 0.15, rootMargin: '0px 0px -10% 0px' }
+      { threshold: 0.1, rootMargin: '0px 0px -8% 0px' }
     );
     observer.observe(el);
-    return () => observer.disconnect();
+    return () => {
+      clearTimeout(fallback);
+      observer.disconnect();
+    };
   }, []);
 
   return (
