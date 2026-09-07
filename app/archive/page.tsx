@@ -15,7 +15,7 @@ export default function ArchivePage() {
 
   return (
     <div className="px-4 py-14 md:px-8">
-      <h1 className="font-sans text-4xl font-medium uppercase tracking-tight md:text-6xl">The Archive</h1>
+      <h1 className="font-display text-4xl font-bold uppercase tracking-tight md:text-6xl">The Archive</h1>
       <p className="mt-2 font-mono text-xs uppercase tracking-widest text-muted">Gone, not forgotten.</p>
       <p className="mt-6 max-w-xl font-sans text-sm text-black/70">
         Every piece here has sold. We keep the record because it proves something: taste, and how fast the right

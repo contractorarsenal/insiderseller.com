@@ -11,7 +11,7 @@ export default function NewArrivalsPage() {
   const items = getNewArrivals(24);
   return (
     <div className="px-4 py-14 md:px-8">
-      <h1 className="font-sans text-4xl font-medium uppercase tracking-tight md:text-6xl">New Arrivals</h1>
+      <h1 className="font-display text-4xl font-bold uppercase tracking-tight md:text-6xl">New Arrivals</h1>
       <p className="mt-2 font-mono text-xs uppercase tracking-widest text-muted">{items.length} Pieces</p>
       <div className="mt-12">
         <ProductGrid products={items} columns={4} />

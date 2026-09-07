@@ -37,7 +37,7 @@ export default async function DesignerPage({ params }: { params: Promise<{ slug:
         </div>
         <div className="relative z-10 px-4 pb-10 md:px-8">
           <p className="mb-3 font-mono text-xs uppercase tracking-widest text-white/70">{designer.location}</p>
-          <h1 className="font-sans text-5xl font-medium uppercase leading-none tracking-tight md:text-7xl">
+          <h1 className="font-display text-5xl font-bold uppercase leading-none tracking-tight md:text-7xl">
             {designer.name}
           </h1>
         </div>

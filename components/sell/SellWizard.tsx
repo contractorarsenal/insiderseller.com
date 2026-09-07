@@ -77,7 +77,7 @@ export default function SellWizard() {
   if (submitted) {
     return (
       <div className="flex min-h-[50vh] flex-col items-center justify-center px-4 text-center">
-        <h2 className="mb-4 font-sans text-3xl font-medium uppercase tracking-tight md:text-4xl">
+        <h2 className="mb-4 font-display text-3xl font-bold uppercase tracking-tight md:text-4xl">
           We&rsquo;ll take it from here.
         </h2>
         <p className="max-w-md font-sans text-sm text-black/70">

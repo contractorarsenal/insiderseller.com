@@ -65,7 +65,7 @@ function ShopContent() {
     <div className="px-4 pb-24 pt-10 md:px-8 md:pt-14">
       <div className="mb-8 flex items-end justify-between">
         <div>
-          <h1 className="font-sans text-4xl font-medium uppercase tracking-tight md:text-6xl">Shop</h1>
+          <h1 className="font-display text-4xl font-bold uppercase tracking-tight md:text-6xl">Shop</h1>
           <p className="mt-2 font-mono text-xs uppercase tracking-widest text-muted">{filtered.length} Pieces</p>
         </div>
       </div>

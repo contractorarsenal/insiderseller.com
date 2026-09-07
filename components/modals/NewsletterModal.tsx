@@ -1,32 +1,77 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import Image from 'next/image';
+import { useEffect, useRef, useState } from 'react';
 import Plate from '@/components/ui/Plate';
+import { useInteractionStore } from '@/lib/store/interactions';
+import { useModalA11y } from '@/lib/hooks/useModalA11y';
 
-const STORAGE_KEY = 'insider-newsletter-dismissed';
+type PopupState = 'neverShown' | 'open' | 'submitted' | 'dismissed';
+
+const DISMISSED_KEY = 'insider-access-dismissed';
+const SUBMITTED_KEY = 'insider-access-submitted';
+
+const DISMISS_SUPPRESS_DAYS = 7;
+const TIMER_DELAY_MS = 18000; // within the 15-25s window
+const SCROLL_DEPTH_THRESHOLD = 0.5;
+const INTERACTION_THRESHOLD = 3;
 
 export default function NewsletterModal() {
+  const [state, setState] = useState<PopupState>('neverShown');
   const [visible, setVisible] = useState(false);
   const [email, setEmail] = useState('');
-  const [submitted, setSubmitted] = useState(false);
+
+  const stateRef = useRef<PopupState>('neverShown');
+  const hasTriggeredRef = useRef(false);
+
+  const interactionCount = useInteractionStore((s) => s.count);
 
   useEffect(() => {
-    let dismissed = false;
-    try {
-      dismissed = localStorage.getItem(STORAGE_KEY) === '1';
-    } catch {
-      dismissed = false;
-    }
-    if (dismissed) return;
+    stateRef.current = state;
+  }, [state]);
 
-    const timer = setTimeout(() => setVisible(true), 15000);
+  function openPopup() {
+    // Synchronous, immediate guard — not dependent on React re-render timing,
+    // so a stray late-firing listener can never reopen a popup that has
+    // already been triggered, dismissed, or submitted.
+    if (hasTriggeredRef.current) return;
+    if (stateRef.current !== 'neverShown') return;
+    hasTriggeredRef.current = true;
+    setState('open');
+    setVisible(true);
+  }
+
+  // Arm the auto-trigger exactly once per page load, and only if the popup
+  // has never been submitted and isn't within its post-dismiss suppression
+  // window. All listeners are torn down the instant any one of them fires,
+  // so there is no path back to "open" afterward except a fresh page load.
+  useEffect(() => {
+    let submitted = false;
+    let dismissedAt: number | null = null;
+    try {
+      submitted = localStorage.getItem(SUBMITTED_KEY) === '1';
+      const raw = localStorage.getItem(DISMISSED_KEY);
+      dismissedAt = raw ? Number(raw) : null;
+    } catch {
+      /* localStorage unavailable (private mode, etc) — treat as neverShown */
+    }
+
+    if (submitted) {
+      setState('submitted');
+      return;
+    }
+
+    if (dismissedAt && Date.now() - dismissedAt < DISMISS_SUPPRESS_DAYS * 86400000) {
+      setState('dismissed');
+      return;
+    }
+
+    const timer = setTimeout(openPopup, TIMER_DELAY_MS);
 
     const onScroll = () => {
-      const scrolled = window.scrollY + window.innerHeight;
-      const docHeight = document.documentElement.scrollHeight;
-      if (docHeight > 0 && scrolled / docHeight > 0.55) {
-        setVisible(true);
-      }
+      const doc = document.documentElement;
+      const pct = doc.scrollHeight > 0 ? (window.scrollY + window.innerHeight) / doc.scrollHeight : 0;
+      if (pct > SCROLL_DEPTH_THRESHOLD) openPopup();
     };
     window.addEventListener('scroll', onScroll, { passive: true });
 
@@ -34,20 +79,22 @@ export default function NewsletterModal() {
       clearTimeout(timer);
       window.removeEventListener('scroll', onScroll);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Third OR-condition: enough product interactions elsewhere on the site.
   useEffect(() => {
-    if (!visible) return;
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && dismiss();
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    if (interactionCount >= INTERACTION_THRESHOLD) openPopup();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [visible]);
+  }, [interactionCount]);
 
-  function dismiss() {
+  const dialogRef = useModalA11y(visible, handleDismiss);
+
+  function handleDismiss() {
     setVisible(false);
+    setState('dismissed');
     try {
-      localStorage.setItem(STORAGE_KEY, '1');
+      localStorage.setItem(DISMISSED_KEY, String(Date.now()));
     } catch {
       /* no-op */
     }
@@ -56,9 +103,9 @@ export default function NewsletterModal() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!email.includes('@')) return;
-    setSubmitted(true);
+    setState('submitted');
     try {
-      localStorage.setItem(STORAGE_KEY, '1');
+      localStorage.setItem(SUBMITTED_KEY, '1');
     } catch {
       /* no-op */
     }
@@ -68,18 +115,23 @@ export default function NewsletterModal() {
   if (!visible) return null;
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 p-4 animate-fade-in-fast">
+    <div
+      className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 p-4 motion-safe:animate-fade-in-fast"
+      onClick={handleDismiss}
+    >
       <div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
-        aria-label="Insider access signup"
-        className="relative grid w-full max-w-3xl grid-cols-1 bg-edwhite md:grid-cols-2"
+        aria-label="Insider Access signup"
+        onClick={(e) => e.stopPropagation()}
+        className="relative grid w-full max-w-3xl grid-cols-1 bg-edwhite shadow-none motion-safe:animate-modal-in md:grid-cols-2"
       >
         <button
           type="button"
-          onClick={dismiss}
+          onClick={handleDismiss}
           aria-label="Close"
-          className="absolute right-3 top-3 z-10 font-mono text-[11px] uppercase tracking-widest text-black/60 hover:text-black md:text-white/70 md:hover:text-white"
+          className="absolute right-4 top-4 z-10 font-mono text-[11px] uppercase tracking-widest text-black/60 transition-colors hover:text-black md:text-white/70 md:hover:text-white"
         >
           Close ✕
         </button>
@@ -88,18 +140,26 @@ export default function NewsletterModal() {
           <Plate seed="newsletter-modal" tone="dark" watermark="ACCESS" />
         </div>
 
-        <div className="flex flex-col justify-center px-6 py-10 md:px-10">
-          {submitted ? (
+        <div className="flex flex-col justify-center px-6 py-12 md:px-10">
+          <Image
+            src="/insider-sellers-logo.png"
+            alt=""
+            width={40}
+            height={33}
+            className="mb-6 h-9 w-auto"
+            aria-hidden="true"
+          />
+          {state === 'submitted' ? (
             <>
-              <p className="mb-2 font-sans text-2xl uppercase tracking-tight">You&rsquo;re in.</p>
+              <p className="mb-2 font-display text-3xl uppercase tracking-tight">You&rsquo;re in.</p>
               <p className="font-mono text-xs text-muted">Watch your inbox for what comes next.</p>
             </>
           ) : (
             <>
-              <h2 className="mb-3 font-sans text-3xl font-medium uppercase leading-[0.95] tracking-tight md:text-4xl">
+              <h2 className="mb-3 font-display text-4xl uppercase leading-[0.92] tracking-tight md:text-5xl">
                 Get Inside.
               </h2>
-              <p className="mb-6 font-sans text-sm text-black/70">
+              <p className="mb-7 font-sans text-sm text-black/70">
                 First access to new drops, rare arrivals and private sourcing.
               </p>
               <form onSubmit={handleSubmit} className="flex flex-col gap-3">
@@ -114,7 +174,7 @@ export default function NewsletterModal() {
                 />
                 <button
                   type="submit"
-                  className="bg-yellow py-3 font-sans text-sm uppercase tracking-widest text-black transition-colors hover:bg-black hover:text-yellow"
+                  className="bg-yellow py-3 font-sans text-sm uppercase tracking-widest text-black transition-colors duration-200 hover:bg-black hover:text-yellow"
                 >
                   Get Access
                 </button>

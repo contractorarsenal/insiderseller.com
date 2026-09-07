@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function FAQPage() {
   return (
     <div className="mx-auto max-w-2xl px-4 py-16 md:px-8">
-      <h1 className="mb-12 font-sans text-4xl font-medium uppercase tracking-tight md:text-6xl">FAQ</h1>
+      <h1 className="mb-12 font-display text-4xl font-bold uppercase tracking-tight md:text-6xl">FAQ</h1>
 
       <Accordion title="How do you grade condition?" defaultOpen>
         <p>

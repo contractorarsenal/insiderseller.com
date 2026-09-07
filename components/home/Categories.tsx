@@ -15,7 +15,7 @@ export default function Categories() {
           <div className="absolute inset-0 transition-transform duration-300 ease-out group-hover:scale-[1.03]">
             <Plate seed={c.seed} tone="dark" />
           </div>
-          <span className="absolute inset-0 flex items-center justify-center font-sans text-3xl font-medium uppercase tracking-wide text-white md:text-4xl">
+          <span className="absolute inset-0 flex items-center justify-center font-display text-3xl font-bold uppercase tracking-wide text-white md:text-4xl">
             {c.label}
           </span>
         </Link>

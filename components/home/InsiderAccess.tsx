@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Reveal from '@/components/ui/Reveal';
 
 export default function InsiderAccess() {
   const [step, setStep] = useState<1 | 2 | 3>(1);
@@ -21,14 +22,16 @@ export default function InsiderAccess() {
   return (
     <section id="insider-access" className="bg-black px-4 py-20 text-white md:px-8 md:py-28">
       <div className="mx-auto max-w-xl text-center">
-        <h2 className="mb-4 font-sans text-4xl font-medium uppercase leading-[0.95] tracking-tight md:text-5xl">
-          Know before
-          <br />
-          everyone else.
-        </h2>
-        <p className="mb-10 font-sans text-sm text-white/70">
-          New pieces don&rsquo;t wait around. Get first access to drops, private sourcing and archive arrivals.
-        </p>
+        <Reveal>
+          <h2 className="mb-4 font-display text-4xl font-bold uppercase leading-[0.95] tracking-tight md:text-5xl">
+            Know before
+            <br />
+            everyone else.
+          </h2>
+          <p className="mb-10 font-sans text-sm text-white/70">
+            New pieces don&rsquo;t wait around. Get first access to drops, private sourcing and archive arrivals.
+          </p>
+        </Reveal>
 
         {step === 1 && (
           <form onSubmit={submitEmail} className="mx-auto flex max-w-md flex-col gap-3 sm:flex-row">
@@ -43,7 +46,7 @@ export default function InsiderAccess() {
             />
             <button
               type="submit"
-              className="whitespace-nowrap bg-yellow px-6 py-4 font-sans text-sm uppercase tracking-widest text-black transition-colors hover:bg-white"
+              className="whitespace-nowrap bg-yellow px-6 py-4 font-sans text-sm uppercase tracking-widest text-black transition-colors duration-200 hover:bg-black hover:text-yellow"
             >
               Get Access
             </button>
@@ -66,7 +69,7 @@ export default function InsiderAccess() {
               />
               <button
                 type="submit"
-                className="whitespace-nowrap bg-yellow px-6 py-4 font-sans text-sm uppercase tracking-widest text-black transition-colors hover:bg-white"
+                className="whitespace-nowrap bg-yellow px-6 py-4 font-sans text-sm uppercase tracking-widest text-black transition-colors duration-200 hover:bg-black hover:text-yellow"
               >
                 Continue
               </button>

@@ -1,5 +1,6 @@
 import { Product } from '@/lib/types';
 import ProductCard from './ProductCard';
+import Reveal from '@/components/ui/Reveal';
 import { cn } from '@/lib/utils';
 
 export default function ProductGrid({
@@ -24,8 +25,10 @@ export default function ProductGrid({
         columns === 4 ? 'lg:grid-cols-4 lg:gap-x-8' : 'lg:grid-cols-2 lg:gap-x-12 lg:gap-y-20'
       )}
     >
-      {products.map((p) => (
-        <ProductCard key={p.id} product={p} />
+      {products.map((p, i) => (
+        <Reveal key={p.id} delay={Math.min(i, 7) * 50}>
+          <ProductCard product={p} />
+        </Reveal>
       ))}
     </div>
   );

@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import { Product } from '@/lib/types';
 import { brandInitials } from '@/lib/utils';
 import Plate from '@/components/ui/Plate';
+import Reveal from '@/components/ui/Reveal';
 
 export default function ProductGallery({ product }: { product: Product }) {
   const [index, setIndex] = useState(0);
@@ -37,11 +38,11 @@ export default function ProductGallery({ product }: { product: Product }) {
       </div>
 
       {/* Desktop: stacked gallery */}
-      <div className="hidden flex-col gap-3 lg:flex">
+      <div className="hidden flex-col gap-4 lg:flex">
         {product.images.map((img) => (
-          <div key={img.id} className="aspect-[3/4] w-full">
+          <Reveal key={img.id} className="aspect-[3/4] w-full">
             <Plate seed={img.id} watermark={brandInitials(product.brand)} label={img.angle} sub={product.sku} />
-          </div>
+          </Reveal>
         ))}
       </div>
     </div>

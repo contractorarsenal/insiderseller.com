@@ -65,7 +65,7 @@ export default function SearchOverlay() {
           onChange={(e) => setQuery(e.target.value)}
           placeholder="WHAT ARE YOU LOOKING FOR?"
           aria-label="Search products and designers"
-          className="w-full bg-transparent font-sans text-3xl uppercase tracking-tight placeholder:text-black/25 focus:outline-none md:text-6xl"
+          className="w-full bg-transparent font-display text-3xl uppercase tracking-tight placeholder:text-black/25 focus:outline-none md:text-6xl"
         />
       </div>
 

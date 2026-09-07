@@ -22,7 +22,7 @@ export default function SellPage() {
     <div>
       <section className="bg-yellow px-4 py-20 md:px-8 md:py-32">
         <div className="mx-auto max-w-4xl">
-          <h1 className="mb-6 font-sans text-[13vw] font-medium uppercase leading-[0.9] tracking-tight text-black sm:text-6xl md:text-8xl">
+          <h1 className="mb-6 font-display text-[13vw] font-bold uppercase leading-[0.9] tracking-tight text-black sm:text-6xl md:text-8xl">
             Sell us
             <br />
             what&rsquo;s worth

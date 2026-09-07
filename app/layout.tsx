@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Space_Grotesk, Inter, JetBrains_Mono } from 'next/font/google';
+import { Archivo, Inter_Tight, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import AnnouncementBar from '@/components/layout/AnnouncementBar';
 import Header from '@/components/layout/Header';
@@ -8,19 +8,23 @@ import SearchOverlay from '@/components/layout/SearchOverlay';
 import CartDrawer from '@/components/cart/CartDrawer';
 import Footer from '@/components/layout/Footer';
 import NewsletterModal from '@/components/modals/NewsletterModal';
+import QuickView from '@/components/product/QuickView';
 
-const spaceGrotesk = Space_Grotesk({
+// PRIMARY DISPLAY — oversized editorial headlines, section titles, wordmarks.
+const archivo = Archivo({
   subsets: ['latin'],
-  variable: '--font-space-grotesk',
-  weight: ['400', '500', '700'],
+  variable: '--font-archivo',
+  weight: ['500', '700', '800', '900'],
 });
 
-const inter = Inter({
+// SECONDARY — body copy, nav, buttons, labels.
+const interTight = Inter_Tight({
   subsets: ['latin'],
-  variable: '--font-inter',
-  weight: ['400', '500'],
+  variable: '--font-inter-tight',
+  weight: ['400', '500', '600'],
 });
 
+// MONOSPACE — prices, sizes, SKUs, condition data, technical metadata.
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
   variable: '--font-jetbrains',
@@ -46,7 +50,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" className={`${archivo.variable} ${interTight.variable} ${jetbrainsMono.variable}`}>
       <body className="font-sans antialiased">
         <a
           href="#main-content"
@@ -59,6 +63,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <MobileMenu />
         <SearchOverlay />
         <CartDrawer />
+        <QuickView />
         <NewsletterModal />
         <main id="main-content">{children}</main>
         <Footer />

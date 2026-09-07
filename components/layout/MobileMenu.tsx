@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect } from 'react';
 import { useUIStore } from '@/lib/store/ui';
@@ -46,7 +47,7 @@ export default function MobileMenu() {
       aria-hidden={!open}
     >
       <div className="flex h-[58px] items-center justify-between px-4">
-        <span className="font-sans text-sm uppercase tracking-widest">Insider Sellers</span>
+        <Image src="/insider-sellers-logo.png" alt="Insider Sellers" width={100} height={83} className="h-8 w-auto" />
         <button
           type="button"
           onClick={() => setOpen(false)}
@@ -57,14 +58,16 @@ export default function MobileMenu() {
         </button>
       </div>
 
-      <nav className="flex flex-1 flex-col justify-center gap-2 px-6">
-        {PRIMARY.map((item) => (
+      <nav className="flex flex-1 flex-col justify-center gap-1 px-6">
+        {PRIMARY.map((item, i) => (
           <Link
             key={item.label}
             href={item.href}
             onClick={() => setOpen(false)}
+            style={{ ['--reveal-delay' as string]: `${80 + i * 60}ms` }}
             className={cn(
-              'py-2 font-sans text-[13vw] font-medium uppercase leading-[1.02] tracking-tight xs:text-5xl',
+              'reveal py-2 font-display text-[13vw] font-bold uppercase leading-[1.02] tracking-tight xs:text-5xl',
+              open && 'is-visible',
               item.accent ? 'text-yellow' : 'text-white'
             )}
           >

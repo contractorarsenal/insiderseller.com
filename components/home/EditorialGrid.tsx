@@ -8,9 +8,9 @@ export default function EditorialGrid() {
   const [a, b, c, d, e, f] = items;
 
   return (
-    <section className="px-4 py-16 md:px-8 md:py-24">
+    <section className="px-4 py-14 md:px-8 md:py-28">
       <div className="mb-10 md:mb-14">
-        <h2 className="font-sans text-3xl font-medium uppercase tracking-tight md:text-5xl">The Edit</h2>
+        <h2 className="font-display text-3xl font-bold uppercase tracking-tight md:text-5xl">The Edit</h2>
       </div>
       <div className="grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-12 md:gap-x-6 md:gap-y-14">
         {a && (

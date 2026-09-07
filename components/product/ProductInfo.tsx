@@ -4,17 +4,14 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { Product } from '@/lib/types';
 import { formatPrice } from '@/lib/utils';
-import { useCartStore } from '@/lib/store/cart';
-import { useUIStore } from '@/lib/store/ui';
 import { useAlertsStore } from '@/lib/store/alerts';
+import { useAddToCart } from '@/lib/hooks/useAddToCart';
 import ConditionBadge from './ConditionBadge';
 import MeasurementTable from '@/components/product/MeasurementTable';
 import Accordion from '@/components/ui/Accordion';
 
 export default function ProductInfo({ product }: { product: Product }) {
-  const inCart = useCartStore((s) => s.productIds.includes(product.id));
-  const addToCart = useCartStore((s) => s.add);
-  const setCartOpen = useUIStore((s) => s.setCartOpen);
+  const { inCart, justAdded, add, openCart } = useAddToCart(product.id);
   const addAlert = useAlertsStore((s) => s.add);
   const [alerted, setAlerted] = useState(false);
   const isSold = product.status === 'SOLD';
@@ -26,13 +23,15 @@ export default function ProductInfo({ product }: { product: Product }) {
 
   return (
     <div>
-      <p className="font-sans text-sm uppercase tracking-widest text-muted">{product.brand}</p>
-      <h1 className="mt-1 font-sans text-2xl font-medium leading-tight md:text-3xl">{product.name}</h1>
+      <p className="font-mono text-xs uppercase tracking-widest text-muted">{product.brand}</p>
+      <h1 className="mt-2 font-display text-3xl font-bold leading-[0.98] tracking-tight md:text-4xl">
+        {product.name}
+      </h1>
 
-      <div className="mt-4 flex items-center gap-4">
+      <div className="mt-5 flex items-center gap-4">
         <span className="font-mono text-2xl">{formatPrice(product.price)}</span>
         {product.isOneOfOne && (
-          <span className="bg-yellow px-2 py-1 font-mono text-[10px] uppercase tracking-widest text-black">
+          <span className="border border-black px-2 py-1 font-mono text-[10px] uppercase tracking-widest text-black">
             1 of 1
           </span>
         )}
@@ -53,10 +52,14 @@ export default function ProductInfo({ product }: { product: Product }) {
 
       <div className="mt-8">
         {!isSold ? (
-          inCart ? (
+          justAdded ? (
+            <div className="w-full bg-black py-4 text-center font-sans text-sm uppercase tracking-widest text-yellow">
+              Added To Bag ✓
+            </div>
+          ) : inCart ? (
             <button
               type="button"
-              onClick={() => setCartOpen(true)}
+              onClick={openCart}
               className="w-full border border-black py-4 font-sans text-sm uppercase tracking-widest transition-colors hover:bg-black hover:text-white"
             >
               In Bag · View Bag
@@ -64,11 +67,8 @@ export default function ProductInfo({ product }: { product: Product }) {
           ) : (
             <button
               type="button"
-              onClick={() => {
-                addToCart(product.id);
-                setCartOpen(true);
-              }}
-              className="w-full bg-yellow py-4 font-sans text-sm uppercase tracking-widest text-black transition-colors hover:bg-black hover:text-yellow"
+              onClick={add}
+              className="w-full bg-yellow py-4 font-sans text-sm uppercase tracking-widest text-black transition-colors duration-200 hover:bg-black hover:text-yellow"
             >
               Add To Cart
             </button>

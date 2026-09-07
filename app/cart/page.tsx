@@ -14,7 +14,7 @@ export default function CartPage() {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-14 md:px-8">
-      <h1 className="mb-10 font-sans text-4xl font-medium uppercase tracking-tight md:text-6xl">Bag</h1>
+      <h1 className="mb-10 font-display text-4xl font-bold uppercase tracking-tight md:text-6xl">Bag</h1>
 
       {lines.length === 0 ? (
         <div className="flex flex-col items-start gap-4">

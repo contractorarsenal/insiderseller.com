@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
@@ -37,8 +38,17 @@ export default function Footer() {
   return (
     <footer className="bg-black text-white">
       <div className="mx-auto max-w-[1728px] px-4 py-16 md:px-8">
-        <div className="mb-14 font-sans text-[13vw] font-medium uppercase leading-none tracking-tight sm:text-6xl md:text-7xl">
-          Insider Sellers
+        <div className="mb-14 flex items-center gap-4 md:gap-6">
+          <Image
+            src="/insider-sellers-logo.png"
+            alt="Insider Sellers"
+            width={90}
+            height={75}
+            className="h-10 w-auto shrink-0 md:h-14"
+          />
+          <div className="font-display text-[11vw] font-black uppercase leading-none tracking-tight sm:text-6xl md:text-7xl">
+            Insider Sellers
+          </div>
         </div>
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
           {COLUMNS.map((col) => (

@@ -3,14 +3,11 @@
 import { useEffect, useState } from 'react';
 import { Product } from '@/lib/types';
 import { formatPrice, cn } from '@/lib/utils';
-import { useCartStore } from '@/lib/store/cart';
-import { useUIStore } from '@/lib/store/ui';
+import { useAddToCart } from '@/lib/hooks/useAddToCart';
 
 export default function MobileBuyBar({ product }: { product: Product }) {
   const [visible, setVisible] = useState(false);
-  const inCart = useCartStore((s) => s.productIds.includes(product.id));
-  const addToCart = useCartStore((s) => s.add);
-  const setCartOpen = useUIStore((s) => s.setCartOpen);
+  const { inCart, justAdded, add, openCart } = useAddToCart(product.id);
   const isSold = product.status === 'SOLD';
 
   useEffect(() => {
@@ -32,10 +29,14 @@ export default function MobileBuyBar({ product }: { product: Product }) {
         <span className="border border-black/20 px-6 py-3 font-mono text-xs uppercase tracking-widest text-muted">
           Sold
         </span>
+      ) : justAdded ? (
+        <span className="bg-black px-6 py-3 font-sans text-xs uppercase tracking-widest text-yellow">
+          Added ✓
+        </span>
       ) : inCart ? (
         <button
           type="button"
-          onClick={() => setCartOpen(true)}
+          onClick={openCart}
           className="border border-black px-6 py-3 font-sans text-xs uppercase tracking-widest"
         >
           View Bag
@@ -43,11 +44,8 @@ export default function MobileBuyBar({ product }: { product: Product }) {
       ) : (
         <button
           type="button"
-          onClick={() => {
-            addToCart(product.id);
-            setCartOpen(true);
-          }}
-          className="bg-yellow px-6 py-3 font-sans text-xs uppercase tracking-widest text-black"
+          onClick={add}
+          className="bg-yellow px-6 py-3 font-sans text-xs uppercase tracking-widest text-black transition-colors duration-200"
         >
           Add To Cart
         </button>

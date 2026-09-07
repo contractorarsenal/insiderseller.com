@@ -10,7 +10,7 @@ export default function AboutPage() {
   return (
     <div>
       <section className="px-4 py-24 md:px-8 md:py-32">
-        <h1 className="max-w-2xl font-sans text-5xl font-medium uppercase leading-[0.95] tracking-tight md:text-7xl">
+        <h1 className="max-w-2xl font-display text-5xl font-bold uppercase leading-[0.95] tracking-tight md:text-7xl">
           We find
           <br />
           what others

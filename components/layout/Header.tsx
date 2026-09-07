@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useCartStore } from '@/lib/store/cart';
@@ -43,20 +44,20 @@ export default function Header() {
             Menu
           </button>
 
-          <nav className="hidden items-center gap-8 lg:flex">
+          <nav className="hidden items-center gap-10 lg:flex">
             <div onMouseEnter={() => setShopOpen(true)}>
               <button
                 type="button"
-                className="font-sans text-sm uppercase tracking-wide underline-anim"
+                className="font-sans text-sm uppercase tracking-wider underline-anim"
                 aria-expanded={shopOpen}
               >
                 Shop
               </button>
             </div>
-            <Link href="/designers" className="font-sans text-sm uppercase tracking-wide underline-anim">
+            <Link href="/designers" className="font-sans text-sm uppercase tracking-wider underline-anim">
               Designers
             </Link>
-            <Link href="/archive" className="font-sans text-sm uppercase tracking-wide underline-anim">
+            <Link href="/archive" className="font-sans text-sm uppercase tracking-wider underline-anim">
               Archive
             </Link>
           </nav>
@@ -65,9 +66,17 @@ export default function Header() {
         {/* Center logo */}
         <Link
           href="/"
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap font-sans text-base font-medium uppercase tracking-widest md:text-lg"
+          aria-label="Insider Sellers — home"
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
         >
-          Insider Sellers
+          <Image
+            src="/insider-sellers-logo.png"
+            alt="Insider Sellers"
+            width={140}
+            height={116}
+            priority
+            className="h-9 w-auto md:h-11"
+          />
         </Link>
 
         {/* Right */}

@@ -20,7 +20,7 @@ export default function AccountPage() {
 
   return (
     <div className="px-4 py-14 md:px-8">
-      <h1 className="mb-10 font-sans text-4xl font-medium uppercase tracking-tight md:text-6xl">Account</h1>
+      <h1 className="mb-10 font-display text-4xl font-bold uppercase tracking-tight md:text-6xl">Account</h1>
 
       <div className="mb-10 flex gap-8 border-b border-black/10">
         {TABS.map((t) => (

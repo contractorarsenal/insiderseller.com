@@ -1,10 +1,11 @@
 import Link from 'next/link';
+import Reveal from '@/components/ui/Reveal';
 
 export default function SellToUsPromo() {
   return (
     <section className="bg-yellow px-4 py-20 md:px-8 md:py-32">
-      <div className="mx-auto max-w-5xl">
-        <h2 className="mb-6 font-sans text-[13vw] font-medium uppercase leading-[0.9] tracking-tight text-black sm:text-6xl md:text-8xl">
+      <Reveal className="mx-auto max-w-5xl">
+        <h2 className="mb-6 font-display text-[13vw] font-black uppercase leading-[0.9] tracking-tight text-black sm:text-6xl md:text-8xl">
           Your closet
           <br />
           is our
@@ -16,11 +17,11 @@ export default function SellToUsPromo() {
         </p>
         <Link
           href="/sell"
-          className="inline-block bg-black px-7 py-4 font-sans text-sm uppercase tracking-widest text-white transition-colors hover:bg-white hover:text-black"
+          className="inline-block bg-black px-7 py-4 font-sans text-sm uppercase tracking-widest text-white transition-colors duration-200 hover:bg-white hover:text-black"
         >
           Sell To Insiders →
         </Link>
-      </div>
+      </Reveal>
     </section>
   );
 }

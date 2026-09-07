@@ -24,10 +24,11 @@ const config: Config = {
         charcoal: '#1A1A1A',
         archive: '#EAEAEA',
         muted: '#808080',
-        yellow: '#E8FC03',
+        yellow: '#FBD601',
       },
       fontFamily: {
-        sans: ['var(--font-space-grotesk)', 'var(--font-inter)', 'Helvetica', 'Arial', 'sans-serif'],
+        display: ['var(--font-archivo)', 'var(--font-inter-tight)', 'Helvetica', 'Arial', 'sans-serif'],
+        sans: ['var(--font-inter-tight)', 'Helvetica', 'Arial', 'sans-serif'],
         mono: ['var(--font-jetbrains)', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },
       letterSpacing: {
