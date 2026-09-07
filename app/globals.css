@@ -1,0 +1,107 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: #FDFDFD;
+  color: #000000;
+  overscroll-behavior-y: none;
+}
+
+* {
+  border-color: #EAEAEA;
+}
+
+::selection {
+  background-color: #E8FC03;
+  color: #000000;
+}
+
+:focus-visible {
+  outline: 2px solid #000000;
+  outline-offset: 2px;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInFast {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/*
+ * Custom utilities live here. Note: none of them declare `display` on an
+ * element that also carries a Tailwind `hidden`/`sm:inline`/etc. class.
+ * Tailwind v3's `@layer` is a build-time ordering hint only (it does not
+ * emit real CSS cascade layers), so a custom rule setting `display` can
+ * still win a same-specificity tie purely by appearing later in the file.
+ * `.underline-anim` relies on `position: relative` only; every element it's
+ * applied to (`<a>`, `<button>`) is already inline/inline-block by default,
+ * which is enough for the absolutely-positioned `::after` underline.
+ */
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .animate-marquee {
+    animation: marquee 28s linear infinite;
+  }
+
+  .underline-anim {
+    position: relative;
+  }
+  .underline-anim::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 100%;
+    height: 1px;
+    background-color: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 250ms ease;
+  }
+  .underline-anim:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 200ms ease forwards;
+  }
+
+  .animate-fade-in-fast {
+    animation: fadeInFast 150ms ease forwards;
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
