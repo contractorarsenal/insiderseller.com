@@ -10,8 +10,9 @@ export function generateStaticParams() {
   return designers.map((d) => ({ slug: d.slug }));
 }
 
-export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
-  const designer = getDesignerBySlug(params.slug);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const designer = getDesignerBySlug(slug);
   if (!designer) return {};
   return {
     title: designer.name,
@@ -19,8 +20,9 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   };
 }
 
-export default function DesignerPage({ params }: { params: { slug: string } }) {
-  const designer = getDesignerBySlug(params.slug);
+export default async function DesignerPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const designer = getDesignerBySlug(slug);
   if (!designer) notFound();
 
   const items = getProductsByBrandSlug(designer.slug);
